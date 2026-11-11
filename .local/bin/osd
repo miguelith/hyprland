@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+notify() {
+  local tag=$1 title=$2 body=$3 value=$4
+  dunstify --app-name=Hyprland --urgency=low --timeout=1800 \
+    --stack-tag "$tag" --hint "int:value:$value" "$title" "$body" >/dev/null
+}
+
+volume() {
+  local target=$1 action=$2 label=$3 state raw percent muted
+  case "$action" in
+    up) wpctl set-volume -l 1 "$target" 5%+ ;;
+    down) wpctl set-volume -l 1 "$target" 5%- ;;
+    mute) wpctl set-mute "$target" toggle ;;
+    *) echo "Unknown volume action: $action" >&2; exit 2 ;;
+  esac
+  state=$(wpctl get-volume "$target")
+  raw=$(awk '{print $2}' <<< "$state")
+  percent=$(awk -v v="$raw" 'BEGIN {printf "%d", v * 100 + 0.5}')
+  muted=false
+  [[ "$state" == *'[MUTED]'* ]] && muted=true
+  if "$muted"; then
+    notify "audio-$label" "$label volume" "Muted · ${percent}%" "$percent"
+  else
+    notify "audio-$label" "$label volume" "${percent}%" "$percent"
+  fi
+}
+
+brightness() {
+  case "$1" in
+    up) brightnessctl -e4 -n2 set 5%+ >/dev/null ;;
+    down) brightnessctl -e4 -n2 set 5%- >/dev/null ;;
+    *) echo "Unknown brightness action: $1" >&2; exit 2 ;;
+  esac
+  local max current percent
+  max=$(brightnessctl max)
+  current=$(brightnessctl get)
+  (( max > 0 )) || exit 1
+  percent=$((current * 100 / max))
+  notify brightness "Brightness" "${percent}%" "$percent"
+}
+
+[[ $# -eq 1 ]] || { echo 'Usage: osd {output-up|output-down|output-mute|input-up|input-down|input-mute|brightness-up|brightness-down}' >&2; exit 2; }
+case "$1" in
+  output-up|output-down|output-mute) volume @DEFAULT_AUDIO_SINK@ "${1#output-}" Output ;;
+  input-up|input-down|input-mute) volume @DEFAULT_AUDIO_SOURCE@ "${1#input-}" Input ;;
+  brightness-up|brightness-down) brightness "${1#brightness-}" ;;
+  *) echo "Unknown action: $1" >&2; exit 2 ;;
+esac

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Toggle the blue-light (night) filter on/off with hyprsunset.
+# hyprsunset stays running while active; killing it does NOT reset the gamma,
+# so we explicitly apply the identity matrix before stopping it.
+TEMP=4000   # color temperature in Kelvin when the filter is on
+
+if pgrep -x hyprsunset >/dev/null; then
+	# Turning off: reset to identity, then stop the daemon.
+	hyprsunset --identity >/dev/null 2>&1 &
+	sleep 0.5
+	pkill -x hyprsunset
+else
+	# Turning on: warm filter.
+	hyprsunset -t "$TEMP" >/dev/null 2>&1 &
+fi

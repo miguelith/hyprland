@@ -1,0 +1,92 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "spacing": 4,
+    "margin-top": 5,
+    "margin-left": 8,
+    "margin-right": 8,
+
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": ["tray", "custom/vpn", "network", "pulseaudio", "custom/mic", "backlight", "battery"],
+
+    "network": {
+        "format-wifi": "󰤨",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰤮",
+        "tooltip-format": "{essid}"
+    },
+
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "on-click": "activate",
+        "sort-by-number": true,
+        "active-only": false
+    },
+
+    "clock": {
+        "format": " {:%I:%M %p}",
+        "format-alt": " {:%Y-%m-%d}",
+        "tooltip-format": "<tt>{calendar}</tt>"
+    },
+
+    "pulseaudio": {
+        "format": "{icon}",
+        "format-muted": "󰝟",
+        "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "tooltip-format": "Output: {volume}%",
+        "on-click": "$HOME/.local/bin/osd output-mute",
+        "scroll-step": 5,
+        "on-scroll-up": "$HOME/.local/bin/osd output-up",
+        "on-scroll-down": "$HOME/.local/bin/osd output-down"
+    },
+
+    "custom/vpn": {
+        "exec": "$HOME/.local/bin/vpn waybar",
+        "return-type": "json",
+        "format": "{}",
+        "on-click": "$HOME/.local/bin/vpn-menu",
+        "on-click-right": "$HOME/.local/bin/vpn status",
+        "tooltip": true,
+        "signal": 11,
+        "interval": 2
+    },
+
+    "custom/mic": {
+        "exec": "$HOME/.config/waybar/scripts/mic.sh",
+        "interval": 1,
+        "exec-on-event": true,
+        "signal": 10,
+        "return-type": "json",
+        "format": "{}",
+        "on-click": "$HOME/.local/bin/osd input-mute; pkill -RTMIN+10 waybar",
+        "scroll-step": 5,
+        "on-scroll-up": "$HOME/.local/bin/osd input-up; pkill -RTMIN+10 waybar",
+        "on-scroll-down": "$HOME/.local/bin/osd input-down; pkill -RTMIN+10 waybar",
+        "tooltip": true
+    },
+
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon}",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "scroll-step": 5,
+        "on-scroll-up": "$HOME/.local/bin/osd brightness-up",
+        "on-scroll-down": "$HOME/.local/bin/osd brightness-down",
+        "tooltip-format": "Brightness: {percent}%"
+    },
+
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}",
+        "tooltip-format": "Battery: {capacity}%",
+        "format-charging": "󰂄",
+        "format-plugged": "󰂄",
+        "format-full": "󰁹",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    }
+}

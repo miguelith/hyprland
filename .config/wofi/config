@@ -1,0 +1,6 @@
+# ~/.config/wofi/config
+style=/home/miguelith/.config/wofi/style.css
+hide_scroll=true
+prompt=
+normal_window=true
+no_actions=true

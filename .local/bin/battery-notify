@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Battery notifier: only fires on plug/unplug transitions and when the
+# battery crosses the 30% and 15% marks on discharge. Nothing else.
+
+exec 9>"${XDG_RUNTIME_DIR:-/tmp}/battery-notify-${UID}.lock"
+flock -n 9 || exit 0
+
+last_state=''
+fired_30=''
+fired_15=''
+fired_5=''
+debug=${BATTERY_NOTIFY_DEBUG:-0}
+
+while :; do
+  info=$(upower -i /org/freedesktop/UPower/devices/DisplayDevice 2>/dev/null || true)
+  percent=$(awk -F: '/^[[:space:]]*percentage:/ {gsub(/[%[:space:]]/, "", $2); print $2; exit}' <<< "$info")
+  state=$(awk -F: '/^[[:space:]]*state:/ {sub(/^[[:space:]]+/, "", $2); print $2; exit}' <<< "$info")
+
+  if [[ "$percent" =~ ^[0-9]+$ ]]; then
+    (( debug )) && printf '[debug] %s state=%s percent=%s last=%s\n' "$(date +%H:%M:%S)" "$state" "$percent" "${last_state:-none}" >> /tmp/battery-notify.log
+    # Charge/discharge edge: charger plugged in or unplugged
+    if [[ -n "$last_state" && "$state" != "$last_state" ]]; then
+      case "$state" in
+        charging|pending-charge) msg="Charger plugged in · ${percent}%" ;;
+        discharging|pending-discharge) msg="Charger unplugged · ${percent}%" ;;
+        fully-charged)           msg="Fully charged" ;;
+        *)                       msg='' ;;
+      esac
+      msg=${msg#\ }
+      if [[ -n "$msg" ]]; then
+        dunstify --app-name=Hyprland --urgency=normal --timeout=4000 \
+          --stack-tag battery-status "Battery" "$msg" >/dev/null || true
+      fi
+    fi
+
+    # Threshold hits — only on discharge, only once per threshold crossing
+    if [[ "$state" == "discharging" ]]; then
+      if (( percent <= 30 )) && [[ "$fired_30" != yes ]]; then
+        dunstify --app-name=Hyprland --urgency=normal --timeout=5000 \
+          --stack-tag battery-status "Battery low" "30% remaining" >/dev/null || true
+        fired_30=yes
+      fi
+      if (( percent <= 15 )) && [[ "$fired_15" != yes ]]; then
+        dunstify --app-name=Hyprland --urgency=critical --timeout=10000 \
+          --stack-tag battery-status "Battery critical" "15% remaining — plug in now" >/dev/null || true
+        fired_15=yes
+      fi
+      if (( percent <= 5 )) && [[ "$fired_5" != yes ]]; then
+        dunstify --app-name=Hyprland --urgency=critical --timeout=0 \
+          --stack-tag battery-status "Battery CRITICAL" "5% remaining — plug in NOW" >/dev/null || true
+        fired_5=yes
+      fi
+    fi
+
+    # Re-arm thresholds once battery is meaningfully above them
+    if (( percent > 35 )); then fired_30=''; fi
+    if (( percent > 20 )); then fired_15=''; fi
+    if (( percent > 10 )); then fired_5=''; fi
+
+    last_state=$state
+  fi
+  sleep 30
+done

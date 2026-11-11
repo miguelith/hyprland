@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VPN="$HOME/.local/bin/vpn"
+
+choice=$(printf 'status\noff\nwarp\ntailscale\n' | wofi --dmenu --prompt='VPN' --cache-file=/dev/null --insensitive) || exit 0
+case "$choice" in
+  status)   "$VPN" status ;;
+  off)      "$VPN" off ;;
+  warp)     "$VPN" warp ;;
+  tailscale) "$VPN" tailscale ;;
+esac

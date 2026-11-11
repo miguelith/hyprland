@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Emoji picker for wofi + wtype.
+# Select an emoji, and it gets typed into the currently focused window.
+# Requires: wofi, wtype, noto-fonts-emoji (to render the emojis).
+set -euo pipefail
+
+list="$HOME/.config/emoji/emoji_list.txt"
+
+selected="$(
+	cat "$list" |
+		wofi --dmenu --prompt 'Emoji' --insensitive --height 60% |
+		awk 'NR==1 { print $1 }'
+)"
+
+# Only type if the user actually selected something (Esc/empty closes).
+if [[ -n "$selected" ]]; then
+	wtype "$selected"
+fi

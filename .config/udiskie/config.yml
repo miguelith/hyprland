@@ -1,0 +1,21 @@
+# udiskie — USB mass storage only.
+# Phones (MTP) and iPhones never appear as block devices, so udisks/udiskie
+# never sees them; no filtering needed.
+
+icon_names:
+  media: /home/miguelith/.config/udiskie/udiskie-media-white.svg
+
+program_options:
+  automount: true
+  notify: true
+  tray: false
+  file_manager: dolphin
+  terminal: ghostty -d
+
+mount_options:
+  - id_type: vfat
+    options: rw,uid=1000,gid=1000,fmask=0133,dmask=0022,iocharset=utf8
+  - id_type: ntfs
+    options: rw,uid=1000,gid=1000,umask=0222
+  - id_type: exfat
+    options: rw,uid=1000,gid=1000,umask=0222

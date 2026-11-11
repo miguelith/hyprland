@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Toggle waybar on/off (true toggle — not a reload).
+# Launches via uwsm to keep it inside the session unit.
+if pgrep -x waybar >/dev/null; then
+	pkill -x waybar
+else
+	uwsm app -- waybar &
+fi
