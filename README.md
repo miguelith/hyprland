@@ -159,7 +159,7 @@ Rules:
 - Do **not** set `QT_STYLE_OVERRIDE` — it overrides the engine and breaks dark-mode text/background colors.
 - Do **not** set `KDE_COLOR_SCHEME_PATH` in `uwsm/env` — `hyprqt6engine` exports it per-app from its own config.
 - `.config/kdeglobals` embeds the `LibadwaitaDark` `[Colors:*]` groups (generated from the scheme file): KColorScheme uses them to recolor Breeze symbolic icons — without them, sidebar icons render black-on-black. Also sets `widgetStyle=hypr` and `[Icons] Theme=Breeze`.
-- Icon theme: **Adwaita for GTK apps, Breeze for Qt/KDE apps** (`theme.icon_theme` and `kdeglobals [Icons]`). KDE's `KIconLoader` rasterizes Adwaita SVGs at a fixed size and upscales them, which renders blurry; Breeze is KDE-native and renders crisply. Breeze ships as a KDE dependency, no extra package.
+- Icon theme: **Adwaita everywhere** (GTK and Qt/KDE, via `theme.icon_theme` and `kdeglobals [Icons]`). Breeze/BreezeDark were tried for KDE but render inconsistently (symbolic icons black-on-dark); Adwaita's full-color icons stay visible on dark backgrounds.
 - The single color source for the dark palette is `.local/share/color-schemes/LibadwaitaDark.colors`, referenced by `hyprqt6engine.conf`.
 
 Relevant files:
