@@ -5,3 +5,4 @@ font-codepoint-map = U+3000-U+303F,U+3400-U+4DBF,U+4E00-U+9FFF,U+F900-U+FAFF=Not
 theme = dark:TokyoNight Night,light:TokyoNight Day
 cursor-style = block
 cursor-style-blink = false
+shell-integration-features = no-cursor
