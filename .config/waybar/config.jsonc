@@ -9,7 +9,7 @@
 
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["tray", "custom/vpn", "network", "pulseaudio", "custom/mic", "backlight", "battery"],
+    "modules-right": ["tray", "network", "pulseaudio", "custom/mic", "backlight", "battery"],
 
     "network": {
         "format-wifi": "󰤨",
@@ -40,17 +40,6 @@
         "scroll-step": 5,
         "on-scroll-up": "$HOME/.local/bin/osd output-up",
         "on-scroll-down": "$HOME/.local/bin/osd output-down"
-    },
-
-    "custom/vpn": {
-        "exec": "$HOME/.local/bin/vpn waybar",
-        "return-type": "json",
-        "format": "{}",
-        "on-click": "$HOME/.local/bin/vpn-menu",
-        "on-click-right": "$HOME/.local/bin/vpn status",
-        "tooltip": true,
-        "signal": 11,
-        "interval": 2
     },
 
     "custom/mic": {

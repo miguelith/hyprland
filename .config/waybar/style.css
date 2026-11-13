@@ -47,13 +47,3 @@ tooltip label { color: #e5e9f0; }
 #pulseaudio.muted, #custom-mic.muted, #network.disconnected { color: #8993a4; }
 #battery.warning { color: #ebcb8b; }
 #battery.critical { color: #bf616a; background: #392d33; }
-
-#custom-vpn.warp {
-    color: #a6e3a1;
-}
-#custom-vpn.tailscale {
-    color: #89b4fa;
-}
-#custom-vpn.off {
-    color: #6c7086;
-}

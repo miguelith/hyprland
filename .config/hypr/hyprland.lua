@@ -281,9 +281,6 @@ hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("/home/miguelith/.local/bin/waybar-to
 -- Night light toggle (hyprsunset)
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("/home/miguelith/.local/bin/hyprsunset-toggle"))
 
--- VPN selector (Wofi)
-hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("/home/miguelith/.local/bin/vpn-menu"))
-
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
 --------------------------------

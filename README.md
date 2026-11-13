@@ -175,50 +175,6 @@ Note: `~/.local/share/` is gitignored except this one tracked file, which `stow 
 
 Changes to `uwsm/env` only take effect after re-logging into the session.
 
-## System-level configuration
-
-Some configurations require changes outside the user's home directory.
-
-### VPN sudoers rule
-
-File:
-
-```text
-/etc/sudoers.d/vpn-toggle
-```
-
-Permissions:
-
-```sh
-sudo chmod 440 /etc/sudoers.d/vpn-toggle
-```
-
-Contents:
-
-```text
-miguelith ALL=(root) NOPASSWD: /usr/bin/systemctl start tailscaled.service, /usr/bin/systemctl stop tailscaled.service, /usr/bin/tailscale up, /usr/bin/tailscale down, /usr/bin/tailscale status, /usr/bin/systemctl start warp-svc.service, /usr/bin/systemctl stop warp-svc.service, /usr/bin/warp-cli connect, /usr/bin/warp-cli disconnect, /usr/bin/warp-cli status
-```
-
-This allows the Waybar VPN module and keybindings to control VPN services without password prompts.
-
-## VPN control
-
-- `SUPER + SHIFT + V` — Opens the VPN selection menu.
-- Waybar `custom/vpn` module — Displays VPN status.
-- Left-click — Opens `vpn-menu`.
-- Right-click — Displays VPN status.
-
-CLI usage:
-
-```sh
-vpn status
-vpn off
-vpn warp
-vpn tailscale
-```
-
-Requires Tailscale and Cloudflare WARP.
-
 ## Maintenance
 
 This repository is the source of truth for the Hyprland desktop configuration.
