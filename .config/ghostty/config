@@ -1,7 +1,7 @@
 # Old-school minimal terminal
 font-family = JetBrainsMono Nerd Font
-font-size = 10
+font-size = 12
 font-codepoint-map = U+3000-U+303F,U+3400-U+4DBF,U+4E00-U+9FFF,U+F900-U+FAFF=Noto Sans Mono CJK SC
-theme = dark:Adwaita Dark,light:Adwaita
+theme = dark:TokyoNight Night,light:TokyoNight Day
 cursor-style = block
 cursor-style-blink = false
