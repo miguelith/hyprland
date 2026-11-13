@@ -1,3 +1,5 @@
+# Generated from .local/share/color-schemes/LibadwaitaDark.colors
+# Required: KColorScheme recolors Breeze symbolic icons from these groups
 [General]
 ColorScheme=LibadwaitaDark
 
@@ -5,7 +7,7 @@ ColorScheme=LibadwaitaDark
 widgetStyle=hypr
 
 [Icons]
-Theme=Adwaita
+Theme=Breeze
 
 [ColorEffects:Disabled]
 Color=255,255,255

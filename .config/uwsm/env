@@ -5,7 +5,6 @@ export GTK_THEME=adw-gtk3:dark
 export GTK_FONT="JetBrainsMono Nerd Font 10"
 export QT_QPA_PLATFORM=wayland;xcb
 export QT_QPA_PLATFORMTHEME=hyprqt6engine
-export KDE_COLOR_SCHEME_PATH=/home/miguelith/.local/share/color-schemes/LibadwaitaDark.colors
 export SDL_VIDEODRIVER=wayland
 export CLUTTER_BACKEND=wayland
 export XDG_CURRENT_DESKTOP=Hyprland

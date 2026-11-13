@@ -17,7 +17,6 @@ hyprland/
 │   ├── ghostty/
 │   ├── gtk-3.0/
 │   ├── gtk-4.0/
-│   ├── qt6ct/
 │   ├── nwg-bar/
 │   ├── swappy/
 │   ├── systemd/
@@ -89,11 +88,9 @@ The tracked `.stowrc` sets `--no-folding` by default: by default Stow "folds" di
 
 - `adw-gtk-theme`
 - `adwaita-icon-theme`
-- `qt6ct`
-- `qt5-wayland`
 - `qt6-wayland`
 
-No GUI theme tools are required: all theme settings are tracked declaratively in this repo (`settings.ini`, `dconf/user.txt`, `qt6ct.conf`, `.gtkrc-2.0`).
+No GUI theme tools are required: all theme settings are tracked declaratively in this repo (`settings.ini`, `dconf/user.txt`, `hyprqt6engine.conf`, `kdeglobals`, `.gtkrc-2.0`).
 
 Fonts:
 
@@ -147,21 +144,31 @@ dconf load / < ~/.config/dconf/user.txt
 
 This imports the tracked preferences into the user's dconf database. It only needs to be repeated when the tracked settings change or when setting up a new installation.
 
-## Dark theme strategy
+## Theme definition (authoritative)
 
-Everything uses Adwaita dark. No extra theme engines (Kvantum, adw-qt, etc.) are required.
+Everything is Adwaita dark. No extra theme engines (Kvantum, adw-qt, qt6ct, etc.).
 
-- **GTK apps**: `adw-gtk3` dark via `GTK_THEME=adw-gtk3:dark`, `gtk-application-prefer-dark-theme=1`, and dconf `color-scheme='prefer-dark'`.
-- **Qt apps**: `hyprqt6engine` (ships with Hyprland) as the Qt platform theme (`QT_QPA_PLATFORMTHEME=hyprqt6engine`). Its `hypr` widget style follows libadwaita automatically. Do **not** set `QT_STYLE_OVERRIDE` — it overrides the engine and breaks dark-mode text/background colors.
-- **KDE apps (Dolphin)**: follow the `LibadwaitaDark` color scheme, applied via `KDE_COLOR_SCHEME_PATH` and `kdeglobals`. The color scheme file lives at `~/.local/share/color-schemes/LibadwaitaDark.colors`.
+| Toolkit | Authority | Mechanism |
+|---|---|---|
+| libadwaita (GTK4) | dconf `color-scheme='prefer-dark'` | follows automatically |
+| GTK3 / GTK2 | `.config/gtk-3.0`, `.config/gtk-4.0`, `.gtkrc-2.0` | `adw-gtk3` + `gtk-application-prefer-dark-theme=1` |
+| Qt / KDE apps | `.config/hypr/hyprqt6engine.conf` | `QT_QPA_PLATFORMTHEME=hyprqt6engine`; the `hypr` widget style follows libadwaita, and the engine loads the tracked `LibadwaitaDark.colors` scheme and exports `KDE_COLOR_SCHEME_PATH` to apps itself |
+
+Rules:
+
+- Do **not** set `QT_STYLE_OVERRIDE` — it overrides the engine and breaks dark-mode text/background colors.
+- Do **not** set `KDE_COLOR_SCHEME_PATH` in `uwsm/env` — `hyprqt6engine` exports it per-app from its own config.
+- `.config/kdeglobals` embeds the `LibadwaitaDark` `[Colors:*]` groups (generated from the scheme file): KColorScheme uses them to recolor Breeze symbolic icons — without them, sidebar icons render black-on-black. Also sets `widgetStyle=hypr` and `[Icons] Theme=Breeze`.
+- Icon theme: **Adwaita for GTK apps, Breeze for Qt/KDE apps** (`theme.icon_theme` and `kdeglobals [Icons]`). KDE's `KIconLoader` rasterizes Adwaita SVGs at a fixed size and upscales them, which renders blurry; Breeze is KDE-native and renders crisply. Breeze ships as a KDE dependency, no extra package.
+- The single color source for the dark palette is `.local/share/color-schemes/LibadwaitaDark.colors`, referenced by `hyprqt6engine.conf`.
 
 Relevant files:
 
 ```text
-.config/hypr/hyprqt6engine.conf   # Qt style = hypr, color scheme, fonts
+.config/hypr/hyprqt6engine.conf   # Qt: style = hypr (follows libadwaita), color scheme, fonts, icons
 .config/uwsm/env                  # session-wide env vars (GTK_THEME, QT_QPA_PLATFORMTHEME, ...)
-.config/qt6ct/qt6ct.conf          # fallback Qt6 config (style = hypr)
-.local/share/color-schemes/LibadwaitaDark.colors  # KDE color scheme (Dolphin)
+.local/share/color-schemes/LibadwaitaDark.colors  # the single dark palette source
+.config/kdeglobals                # KConfig fallback for KDE apps
 ```
 
 Note: `~/.local/share/` is gitignored except this one tracked file, which `stow --no-folding` symlinks into place automatically.
