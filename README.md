@@ -19,7 +19,6 @@ hyprland/
 │   ├── gtk-4.0/
 │   ├── qt6ct/
 │   ├── nwg-bar/
-│   ├── nwg-look/
 │   ├── swappy/
 │   ├── systemd/
 │   ├── udiskie/
@@ -29,6 +28,7 @@ hyprland/
 ├── Pictures/
 │   └── Wallpapers/
 ├── .gtkrc-2.0
+├── .stowrc                 # --no-folding: per-file symlinks, no directory folds
 └── README.md
 ```
 
@@ -38,16 +38,16 @@ Install GNU Stow, then run from the parent directory:
 
 ```sh
 cd ~/dotfiles
-stow -t ~ --no-folding hyprland
+stow -t ~ hyprland
 ```
 
 To remove the deployed symlinks:
 
 ```sh
-stow -D -t ~ --no-folding hyprland
+stow -D -t ~ hyprland
 ```
 
-`--no-folding` is important: by default Stow "folds" directories, replacing e.g. `~/.local/share` with a single symlink into the repo. Anything an application then writes under `~/.local/share` would land inside the repository. With `--no-folding`, Stow symlinks each file individually (`~/.local/share/color-schemes/LibadwaitaDark.colors`, `~/.local/bin/*`, ...) so runtime data stays out of the repo. `.local/share/` is additionally gitignored as a safety net, except for explicitly tracked config files.
+The tracked `.stowrc` sets `--no-folding` by default: by default Stow "folds" directories, replacing e.g. `~/.local/share` with a single symlink into the repo. Anything an application then writes under `~/.local/share` would land inside the repository. With `--no-folding`, Stow symlinks each file individually (`~/.local/share/color-schemes/LibadwaitaDark.colors`, `~/.local/bin/*`, ...) so runtime data stays out of the repo. `.local/share/` is additionally gitignored as a safety net, except for explicitly tracked config files.
 
 ## Dependencies
 
@@ -87,12 +87,13 @@ stow -D -t ~ --no-folding hyprland
 
 ### Theming
 
-- `adw-gtk3`
+- `adw-gtk-theme`
 - `adwaita-icon-theme`
-- `nwg-look`
 - `qt6ct`
 - `qt5-wayland`
 - `qt6-wayland`
+
+No GUI theme tools are required: all theme settings are tracked declaratively in this repo (`settings.ini`, `dconf/user.txt`, `qt6ct.conf`, `.gtkrc-2.0`).
 
 Fonts:
 
@@ -150,7 +151,7 @@ This imports the tracked preferences into the user's dconf database. It only nee
 
 Everything uses Adwaita dark. No extra theme engines (Kvantum, adw-qt, etc.) are required.
 
-- **GTK apps**: `adw-gtk3` dark via `GTK_THEME=adw-gtk3:dark`, `gtk-application-prefer-dark-theme=1`, and dconf `color-scheme='prefer-dark'`. Managed by `nwg-look`.
+- **GTK apps**: `adw-gtk3` dark via `GTK_THEME=adw-gtk3:dark`, `gtk-application-prefer-dark-theme=1`, and dconf `color-scheme='prefer-dark'`.
 - **Qt apps**: `hyprqt6engine` (ships with Hyprland) as the Qt platform theme (`QT_QPA_PLATFORMTHEME=hyprqt6engine`). Its `hypr` widget style follows libadwaita automatically. Do **not** set `QT_STYLE_OVERRIDE` — it overrides the engine and breaks dark-mode text/background colors.
 - **KDE apps (Dolphin)**: follow the `LibadwaitaDark` color scheme, applied via `KDE_COLOR_SCHEME_PATH` and `kdeglobals`. The color scheme file lives at `~/.local/share/color-schemes/LibadwaitaDark.colors`.
 
