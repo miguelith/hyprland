@@ -26,7 +26,6 @@ hyprland/
 │   └── bin/
 ├── Pictures/
 │   └── Wallpapers/
-├── .gtkrc-2.0
 ├── .stowrc                 # --no-folding: per-file symlinks, no directory folds
 └── README.md
 ```
@@ -90,7 +89,7 @@ The tracked `.stowrc` sets `--no-folding` by default: by default Stow "folds" di
 - `adwaita-icon-theme`
 - `qt6-wayland`
 
-No GUI theme tools are required: all theme settings are tracked declaratively in this repo (`settings.ini`, `dconf/user.txt`, `hyprqt6engine.conf`, `kdeglobals`, `.gtkrc-2.0`).
+No GUI theme tools are required: all theme settings are tracked declaratively in this repo (`settings.ini`, `dconf/user.txt`, `hyprqt6engine.conf`, `kdeglobals`).
 
 Fonts:
 
@@ -151,12 +150,13 @@ Everything is Adwaita dark. No extra theme engines (Kvantum, adw-qt, qt6ct, etc.
 | Toolkit | Authority | Mechanism |
 |---|---|---|
 | libadwaita (GTK4) | dconf `color-scheme='prefer-dark'` | follows automatically |
-| GTK3 / GTK2 | `.config/gtk-3.0`, `.config/gtk-4.0`, `.gtkrc-2.0` | `adw-gtk3` + `gtk-application-prefer-dark-theme=1` |
+| GTK3 / GTK4 | `.config/gtk-3.0/settings.ini`, `.config/gtk-4.0/settings.ini` | `adw-gtk3` + `gtk-application-prefer-dark-theme=1` |
 | Qt / KDE apps | `.config/hypr/hyprqt6engine.conf` | `QT_QPA_PLATFORMTHEME=hyprqt6engine`; the `hypr` widget style follows libadwaita, and the engine loads the tracked `LibadwaitaDark.colors` scheme and exports `KDE_COLOR_SCHEME_PATH` to apps itself |
 
 Rules:
 
 - Do **not** set `QT_STYLE_OVERRIDE` — it overrides the engine and breaks dark-mode text/background colors.
+- Do **not** set `GTK_THEME` or `GTK_FONT` env vars — `settings.ini` + dconf are the single GTK authorities.
 - Do **not** set `KDE_COLOR_SCHEME_PATH` in `uwsm/env` — `hyprqt6engine` exports it per-app from its own config.
 - `.config/kdeglobals` embeds the `LibadwaitaDark` `[Colors:*]` groups (generated from the scheme file): KColorScheme uses them to recolor Breeze symbolic icons — without them, sidebar icons render black-on-black. Also sets `widgetStyle=hypr` and `[Icons] Theme=Breeze`.
 - Icon theme: **Adwaita everywhere** (GTK and Qt/KDE, via `theme.icon_theme` and `kdeglobals [Icons]`). Breeze/BreezeDark were tried for KDE but render inconsistently (symbolic icons black-on-dark); Adwaita's full-color icons stay visible on dark backgrounds.
@@ -166,7 +166,7 @@ Relevant files:
 
 ```text
 .config/hypr/hyprqt6engine.conf   # Qt: style = hypr (follows libadwaita), color scheme, fonts, icons
-.config/uwsm/env                  # session-wide env vars (GTK_THEME, QT_QPA_PLATFORMTHEME, ...)
+.config/uwsm/env                  # session-wide env vars (QT_QPA_PLATFORMTHEME, ...). No GTK_THEME: settings.ini + dconf are the authorities
 .local/share/color-schemes/LibadwaitaDark.colors  # the single dark palette source
 .config/kdeglobals                # KConfig fallback for KDE apps
 ```
