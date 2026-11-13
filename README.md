@@ -17,9 +17,7 @@ hyprland/
 │   ├── ghostty/
 │   ├── gtk-3.0/
 │   ├── gtk-4.0/
-│   ├── qt5ct/
 │   ├── qt6ct/
-│   ├── Kvantum/
 │   ├── nwg-bar/
 │   ├── nwg-look/
 │   ├── swappy/
@@ -90,9 +88,7 @@ stow -D -t ~ hyprland
 - `adw-gtk3`
 - `adwaita-icon-theme`
 - `nwg-look`
-- `qt5ct`
 - `qt6ct`
-- `kvantum`
 - `qt5-wayland`
 - `qt6-wayland`
 
@@ -147,6 +143,31 @@ dconf load / < ~/.config/dconf/user.txt
 ```
 
 This imports the tracked preferences into the user's dconf database. It only needs to be repeated when the tracked settings change or when setting up a new installation.
+
+## Dark theme strategy
+
+Everything uses Adwaita dark. No extra theme engines (Kvantum, adw-qt, etc.) are required.
+
+- **GTK apps**: `adw-gtk3` dark via `GTK_THEME=adw-gtk3:dark`, `gtk-application-prefer-dark-theme=1`, and dconf `color-scheme='prefer-dark'`. Managed by `nwg-look`.
+- **Qt apps**: `hyprqt6engine` (ships with Hyprland) as the Qt platform theme (`QT_QPA_PLATFORMTHEME=hyprqt6engine`). Its `hypr` widget style follows libadwaita automatically. Do **not** set `QT_STYLE_OVERRIDE` — it overrides the engine and breaks dark-mode text/background colors.
+- **KDE apps (Dolphin)**: follow the `LibadwaitaDark` color scheme, applied via `KDE_COLOR_SCHEME_PATH` and `kdeglobals`. The color scheme file lives at `~/.local/share/color-schemes/LibadwaitaDark.colors`.
+
+Relevant files:
+
+```text
+.config/hypr/hyprqt6engine.conf   # Qt style = hypr, color scheme, fonts
+.config/uwsm/env                  # session-wide env vars (GTK_THEME, QT_QPA_PLATFORMTHEME, ...)
+.config/qt6ct/qt6ct.conf          # fallback Qt6 config (style = hypr)
+.local/share/color-schemes/LibadwaitaDark.colors  # KDE color scheme (Dolphin)
+```
+
+Note: `~/.local/share/` is gitignored except this one tracked file, so after stowing, copy it manually if the live file is missing:
+
+```sh
+cp ~/dotfiles/hyprland/.local/share/color-schemes/LibadwaitaDark.colors ~/.local/share/color-schemes/
+```
+
+Changes to `uwsm/env` only take effect after re-logging into the session.
 
 ## System-level configuration
 
