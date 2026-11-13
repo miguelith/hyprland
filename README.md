@@ -38,14 +38,16 @@ Install GNU Stow, then run from the parent directory:
 
 ```sh
 cd ~/dotfiles
-stow -t ~ hyprland
+stow -t ~ --no-folding hyprland
 ```
 
 To remove the deployed symlinks:
 
 ```sh
-stow -D -t ~ hyprland
+stow -D -t ~ --no-folding hyprland
 ```
+
+`--no-folding` is important: by default Stow "folds" directories, replacing e.g. `~/.local/share` with a single symlink into the repo. Anything an application then writes under `~/.local/share` would land inside the repository. With `--no-folding`, Stow symlinks each file individually (`~/.local/share/color-schemes/LibadwaitaDark.colors`, `~/.local/bin/*`, ...) so runtime data stays out of the repo. `.local/share/` is additionally gitignored as a safety net, except for explicitly tracked config files.
 
 ## Dependencies
 
@@ -161,11 +163,7 @@ Relevant files:
 .local/share/color-schemes/LibadwaitaDark.colors  # KDE color scheme (Dolphin)
 ```
 
-Note: `~/.local/share/` is gitignored except this one tracked file, so after stowing, copy it manually if the live file is missing:
-
-```sh
-cp ~/dotfiles/hyprland/.local/share/color-schemes/LibadwaitaDark.colors ~/.local/share/color-schemes/
-```
+Note: `~/.local/share/` is gitignored except this one tracked file, which `stow --no-folding` symlinks into place automatically.
 
 Changes to `uwsm/env` only take effect after re-logging into the session.
 
