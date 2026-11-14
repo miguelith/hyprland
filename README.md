@@ -24,6 +24,8 @@ hyprland/
 │   └── uwsm/
 ├── .local/
 │   └── bin/
+├── system/
+│   └── 01-battery.conf     # TLP config (deployed to /etc/tlp.d/ manually)
 ├── Pictures/
 │   └── Wallpapers/
 ├── .stowrc                 # --no-folding: per-file symlinks, no directory folds
@@ -174,6 +176,32 @@ Relevant files:
 Note: `~/.local/share/` is gitignored except this one tracked file, which `stow --no-folding` symlinks into place automatically.
 
 Changes to `uwsm/env` only take effect after re-logging into the session.
+
+## Battery optimization (ThinkPad T430)
+
+TLP handles power management. The config is tracked in the repo:
+
+```text
+system/01-battery.conf
+```
+
+Deploy it (this file lives outside `$HOME`, so Stow can't link it):
+
+```sh
+sudo cp ~/dotfiles/hyprland/system/01-battery.conf /etc/tlp.d/
+sudo tlp start
+```
+
+What it does:
+
+- CPU: `performance` governor/EPB on AC, `powersave`/`power` on battery; turbo boost off on battery
+- Platform profile: `low-power` on battery
+- WiFi/Bluetooth power saving on battery; Wake-on-LAN disabled
+- Runtime PM (PCIe `powersupersave` on battery, SATA ALPM, disk APM + spindown, USB autosuspend, audio power save)
+- Charge thresholds: start **40%**, stop **80%** — the biggest lifespan win for an aging ThinkPad battery (verified active: `sudo tlp-stat -b`)
+- Bluetooth/WWAN powered off when idle on battery
+
+Dependencies: `tlp` (and `ethtool` for WoL disable). Do not install `power-profiles-daemon` alongside it — TLP conflicts with it.
 
 ## Maintenance
 
