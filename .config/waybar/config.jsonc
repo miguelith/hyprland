@@ -9,7 +9,7 @@
 
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["tray", "network", "pulseaudio", "custom/mic", "backlight", "battery"],
+    "modules-right": ["tray", "network", "pulseaudio", "backlight", "battery"],
 
     "network": {
         "format-wifi": "󰤨",
@@ -35,25 +35,15 @@
         "format": "{icon}",
         "format-muted": "󰝟",
         "format-icons": ["󰕿", "󰖀", "󰕾"],
+        "format-source": "󰍬",
+        "format-source-muted": "󰍭",
         "tooltip-format": "Output: {volume}%",
+        "tooltip-format-source": "Input: {volume}%",
         "on-click": "$HOME/.local/bin/osd output-mute",
-        "scroll-step": 5,
+        "on-click-middle": "$HOME/.local/bin/osd input-mute",
         "on-scroll-up": "$HOME/.local/bin/osd output-up",
-        "on-scroll-down": "$HOME/.local/bin/osd output-down"
-    },
-
-    "custom/mic": {
-        "exec": "$HOME/.config/waybar/scripts/mic.sh",
-        "interval": 1,
-        "exec-on-event": true,
-        "signal": 10,
-        "return-type": "json",
-        "format": "{}",
-        "on-click": "$HOME/.local/bin/osd input-mute; pkill -RTMIN+10 waybar",
-        "scroll-step": 5,
-        "on-scroll-up": "$HOME/.local/bin/osd input-up; pkill -RTMIN+10 waybar",
-        "on-scroll-down": "$HOME/.local/bin/osd input-down; pkill -RTMIN+10 waybar",
-        "tooltip": true
+        "on-scroll-down": "$HOME/.local/bin/osd output-down",
+        "scroll-step": 5
     },
 
     "backlight": {
