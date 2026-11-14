@@ -1,8 +1,0 @@
-#!/bin/bash
-# Update the Neovim AppImage at ~/.local/bin/nvim to the latest release.
-set -e
-
-ASSET="$HOME/.local/bin/nvim.appimage"
-curl -fsSL -o "$ASSET" "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage"
-chmod +x "$ASSET"
-mv -f "$ASSET" "$HOME/.local/bin/nvim"
