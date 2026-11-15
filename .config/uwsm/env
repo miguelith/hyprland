@@ -10,8 +10,3 @@ export XDG_SESSION_TYPE=wayland
 export XDG_SESSION_DESKTOP=Hyprland
 export ELECTRON_OZONE_PLATFORM_HINT=wayland
 export MOZ_ENABLE_WAYLAND=1
-# Ghostty segfaults in Mesa's GL renderer on this Ivy Bridge GPU (HD 4000);
-# force GTK4 to the software cairo renderer for stability.
-export GSK_RENDERER=cairo
-export MESA_GL_VERSION_OVERRIDE=4.3FC
-export MESA_GLSL_VERSION_OVERRIDE=430

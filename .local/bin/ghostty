@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Ivy Bridge (HD 4000) GL is unusable for ghostty: hardware GL refuses EGL
+# context creation (BadMatch) without fake version overrides, and segfaults
+# with them. Force Mesa's software renderer (llvmpipe, GL 4.5) for ghostty's
+# own OpenGL renderer and cairo for GTK's chrome renderer.
+export LIBGL_ALWAYS_SOFTWARE=1
+export GSK_RENDERER=cairo
+exec /usr/bin/ghostty "$@"
