@@ -1,3 +1,7 @@
-# Never deploy the system config staging area to the home directory;
-# it is copied to /etc/tlp.d/ manually (see README battery section).
+# Never deploy these to the home directory.
 system
+setup.sh
+README.md
+.gitignore
+.git
+.stow-local-ignore
