@@ -192,6 +192,12 @@ sudo cp ~/dotfiles/hyprland/system/01-battery.conf /etc/tlp.d/
 sudo tlp start
 ```
 
+These steps (plus dconf import and wallpaper copies) are bundled in `setup.sh` at the repo root — run it once after stowing:
+
+```sh
+~/dotfiles/hyprland/setup.sh
+```
+
 What it does:
 
 - CPU: `performance` governor/EPB on AC, `powersave`/`power` on battery; turbo boost off on battery
