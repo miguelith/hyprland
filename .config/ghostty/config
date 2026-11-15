@@ -6,4 +6,4 @@ theme = dark:TokyoNight Night,light:TokyoNight Day
 cursor-style = block
 cursor-style-blink = false
 shell-integration-features = no-cursor
-confirm-quit = false
+confirm-close-surface = false
