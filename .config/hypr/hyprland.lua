@@ -246,8 +246,16 @@ hl.bind(
 )
 
 -- Brightness
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd brightness-up"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd brightness-down"), { locked = true, repeating = true })
+hl.bind(
+	"XF86MonBrightnessUp",
+	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd brightness-up"),
+	{ locked = true, repeating = true }
+)
+hl.bind(
+	"XF86MonBrightnessDown",
+	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd brightness-down"),
+	{ locked = true, repeating = true }
+)
 
 -- Media
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
@@ -257,7 +265,6 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true 
 
 -- Screenshots
 hl.bind("Print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("grim - | wl-copy"))
 
 -- Clipboard
