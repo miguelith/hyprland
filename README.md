@@ -52,19 +52,6 @@ stow -D -t ~ hyprland
 
 The tracked `.stowrc` sets `--no-folding` by default: by default Stow "folds" directories, replacing e.g. `~/.local/share` with a single symlink into the repo. Anything an application then writes under `~/.local/share` would land inside the repository. With `--no-folding`, Stow symlinks each file individually (`~/.local/share/color-schemes/LibadwaitaDark.colors`, `~/.local/bin/*`, ...) so runtime data stays out of the repo. `.local/share/` is additionally gitignored as a safety net, except for explicitly tracked config files.
 
-## Path conventions
-
-No config hardcodes an absolute home directory. Each program uses its native mechanism:
-
-| Program | Mechanism |
-|---|---|
-| Hyprland Lua (`hyprland.lua`) | `os.getenv("HOME")` |
-| hyprlang configs (`hyprpaper`, `hyprlock`, `hyprqt6engine`) | `$HOME/...` (expanded by hyprlang) |
-| wofi | Default `$XDG_CONFIG_HOME/wofi/style.css`; no `style=` line |
-| udiskie | GTK icon-theme name; the SVG lives under `.local/share/icons/hicolor` |
-
-Other shell scripts in the repo should use `$HOME` or `$XDG_*` variables rather than absolute paths.
-
 ## Dependencies
 
 ### Core session
@@ -189,7 +176,7 @@ Relevant files:
 .config/kdeglobals                # KConfig fallback for KDE apps
 ```
 
-Note: `~/.local/share/` is gitignored except for explicitly tracked files (the color scheme and the udiskie icon), which `stow --no-folding` symlinks into place automatically.
+Note: `~/.local/share/` is gitignored except for explicitly tracked files, which `stow --no-folding` symlinks into place automatically.
 
 Changes to `uwsm/env` only take effect after re-logging into the session.
 
