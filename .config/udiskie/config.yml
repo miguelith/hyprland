@@ -3,7 +3,8 @@
 # never sees them; no filtering needed.
 
 icon_names:
-  media: /home/miguelith/.config/udiskie/udiskie-media-white.svg
+  # Resolved by GTK's icon theme, not as a literal path.
+  media: udiskie-media-white
 
 program_options:
   automount: true

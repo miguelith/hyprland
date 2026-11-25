@@ -1,5 +1,5 @@
 # ~/.config/wofi/config
-style=/home/miguelith/.config/wofi/style.css
+# wofi loads $XDG_CONFIG_HOME/wofi/style.css automatically; no style= needed.
 hide_scroll=true
 prompt=
 normal_window=true

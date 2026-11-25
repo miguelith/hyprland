@@ -24,12 +24,16 @@ local browser = "firefox"
 local fileManager = "dolphin"
 local menu = "wofi --show drun"
 
+-- Resolve user-specific paths from the environment instead of hardcoding $HOME.
+local home = assert(os.getenv("HOME"), "HOME is not set")
+local bin = home .. "/.local/bin"
+
 -------------------
 ---- AUTOSTART ----
 -------------------
 
 hl.on("hyprland.start", function()
-	hl.exec_cmd("uwsm app -- /home/miguelith/.local/bin/battery-notify &")
+	hl.exec_cmd("uwsm app -- " .. bin .. "/battery-notify &")
 	hl.exec_cmd("uwsm app -- waybar &")
 	hl.exec_cmd("uwsm app -- dunst &")
 	hl.exec_cmd("uwsm app -- hyprpaper &")
@@ -232,34 +236,34 @@ hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- Volume
 hl.bind(
 	"XF86AudioRaiseVolume",
-	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd output-up"),
+	hl.dsp.exec_cmd(bin .. "/osd output-up"),
 	{ locked = true, repeating = true }
 )
 hl.bind(
 	"XF86AudioLowerVolume",
-	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd output-down"),
+	hl.dsp.exec_cmd(bin .. "/osd output-down"),
 	{ locked = true, repeating = true }
 )
 hl.bind(
 	"XF86AudioMute",
-	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd output-mute"),
+	hl.dsp.exec_cmd(bin .. "/osd output-mute"),
 	{ locked = true, repeating = true }
 )
 hl.bind(
 	"XF86AudioMicMute",
-	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd input-mute"),
+	hl.dsp.exec_cmd(bin .. "/osd input-mute"),
 	{ locked = true, repeating = true }
 )
 
 -- Brightness
 hl.bind(
 	"XF86MonBrightnessUp",
-	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd brightness-up"),
+	hl.dsp.exec_cmd(bin .. "/osd brightness-up"),
 	{ locked = true, repeating = true }
 )
 hl.bind(
 	"XF86MonBrightnessDown",
-	hl.dsp.exec_cmd("/home/miguelith/.local/bin/osd brightness-down"),
+	hl.dsp.exec_cmd(bin .. "/osd brightness-down"),
 	{ locked = true, repeating = true }
 )
 
@@ -286,13 +290,13 @@ hl.bind(
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("hyprpicker -a"))
 
 -- Emoji picker (wofi + wtype, types into focused window)
-hl.bind(mainMod .. " + period", hl.dsp.exec_cmd("/home/miguelith/.local/bin/emoji-picker"))
+hl.bind(mainMod .. " + period", hl.dsp.exec_cmd(bin .. "/emoji-picker"))
 
 -- Toggle waybar (true toggle, not reload)
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("/home/miguelith/.local/bin/waybar-toggle"))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(bin .. "/waybar-toggle"))
 
 -- Night light toggle (hyprsunset)
-hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("/home/miguelith/.local/bin/hyprsunset-toggle"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(bin .. "/hyprsunset-toggle"))
 
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
